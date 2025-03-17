@@ -1,0 +1,198 @@
+"use client";
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { toast } from "sonner"; // Ensure Sonner is imported
+import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation"; // Use next/navigation for searchParams
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+
+const ResetPasswordPage = () => {
+  const searchParams = useSearchParams(); // Get query parameters
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [token, setToken] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [passwordColor, setPasswordColor] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    // Get token and email from searchParams
+    const tokenFromQuery = searchParams.get("token");
+    const emailFromQuery = searchParams.get("email");
+
+    if (tokenFromQuery && emailFromQuery) {
+      setToken(tokenFromQuery);
+      setEmail(emailFromQuery);
+    } else {
+      toast.error("Invalid or missing token/email.", {
+        position: "top-right", // Position the toast in the top-right corner
+        style: {
+          backgroundColor: "#ef233c", // Error color
+          color: "#fff", // White text
+        },
+      });
+      window.location.href = "/login"; // Redirect to login if the token or email is missing
+    }
+  }, [searchParams]);
+
+  const colorOptions = ["yellow", "orange", "red", "pink", "purple", "green", "blue", "black"];
+
+  // Password input validation to allow only hexadecimal characters (0-9, A-F)
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    const hexRegex = /^[0-9A-Fa-f]*$/; // Only allows hexadecimal characters
+
+    if (hexRegex.test(value)) {
+      setNewPassword(value);
+    } else {
+      toast.error("Password must contain only hexadecimal characters (0-9, A-F).", {
+        position: "top-right", // Position the toast in the top-right corner
+        style: {
+          backgroundColor: "#ef233c", // Error color
+          color: "#fff", // White text
+        },
+      });
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match!", {
+        position: "top-right", // Toast from top-right
+        style: {
+          backgroundColor: "#ef233c", // Error color
+          color: "#fff", // White text
+        },
+      });
+      return;
+    }
+
+    if (!passwordColor) {
+      toast.error("Please select a password color.", {
+        position: "top-right", // Toast from top-right
+        style: {
+          backgroundColor: "#ef233c", // Error color
+          color: "#fff", // White text
+        },
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/v1/resetpassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword, token, email, passwordColor }), // Send token and email along with the new password and color
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Password reset successful!", {
+          position: "top-right", // Toast from top-right
+          style: {
+            backgroundColor: "#29bf12", // Success color
+            color: "#fff", // White text
+          },
+        });
+        router.push("/login");
+      } else {
+        toast.error(data.message || "Password reset failed.", {
+          position: "top-right", // Toast from top-right
+          style: {
+            backgroundColor: "#ef233c", // Error color
+            color: "#fff", // White text
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Password reset failed:", error);
+      toast.error("An error occurred while resetting password.", {
+        position: "top-right", // Toast from top-right
+        style: {
+          backgroundColor: "#ef233c", // Error color
+          color: "#fff", // White text
+        },
+      });
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
+      <Card className="w-full max-w-md shadow-lg p-8 rounded-lg bg-white border border-gray-200">
+        <h2 className="text-3xl font-semibold text-center text-black mb-6">Reset Password</h2>
+
+        <form onSubmit={handleResetPassword} className="space-y-4">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="New Password (Hexadecimal)"
+            value={newPassword}
+            onChange={handlePasswordChange}
+            className="w-full border border-gray-300"
+            required
+          />
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full border border-gray-300"
+            required
+          />
+
+          <div className="flex items-center gap-3">
+            <Select value={passwordColor} onValueChange={setPasswordColor}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Password Color" />
+              </SelectTrigger>
+              <SelectContent>
+                {colorOptions.map((color) => (
+                  <SelectItem key={color} value={color}>
+                    {color.charAt(0).toUpperCase() + color.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {passwordColor && (
+              <div
+                className="w-10 aspect-square rounded-full border border-gray-400"
+                style={{ backgroundColor: passwordColor === "green" ? "#affc41" : passwordColor === "purple" ? "#c77dff" : passwordColor }}
+              />
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+              className="w-4 h-4 accent-black cursor-pointer"
+            />
+            <label htmlFor="showPassword" className="text-gray-700 text-sm cursor-pointer">
+              Show Password
+            </label>
+          </div>
+
+          <Button type="submit" className="w-full mb-4 bg-black text-white hover:bg-gray-800">
+            Reset Password
+          </Button>
+        </form>
+
+        <div className="text-center mt-4">
+          <span className="text-sm text-gray-600">Remember your password? </span>
+          <Link href="/login" className="text-sm font-medium text-black hover:underline">
+            Login
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+export default ResetPasswordPage;

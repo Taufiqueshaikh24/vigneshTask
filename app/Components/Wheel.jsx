@@ -731,158 +731,700 @@
 
 
 
-import { useState } from "react";
 
-const ColorWheel = () => {
-  const characters = [
-    { inner: "A", outer: "1" },
-    { inner: "B", outer: "2" },
-    { inner: "C", outer: "3" },
-    { inner: "D", outer: "4" },
-    { inner: "E", outer: "5" },
-    { inner: "F", outer: "6" },
-    { inner: "G", outer: "7" },
-    { inner: "H", outer: "8" },
-  ];
+// this isworking for colors 
 
-  const colors = ["red", "orange", "yellow", "green", "blue", "darkgreen", "violet", "gray"];
+  // import { useState } from "react";
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  // const ColorWheel = () => {
+  //   const characters = [
+  //     { inner: "A", outer: "1" },
+  //     { inner: "B", outer: "2" },
+  //     { inner: "C", outer: "3" },
+  //     { inner: "D", outer: "4" },
+  //     { inner: "E", outer: "5" },
+  //     { inner: "F", outer: "6" },
+  //     { inner: "G", outer: "7" },
+  //     { inner: "H", outer: "8" },
+  //   ];
+
+  //   const colors = ["red", "orange", "yellow", "green", "blue", "darkgreen", "violet", "gray"];
+
+  //   const [activeIndex, setActiveIndex] = useState(3);
+  //   const [password, setPassword] = useState("");
+  //   const [showPassword, setShowPassword] = useState(false);
+
+  //   const rotateClockwise = () => {
+  //     setActiveIndex((prev) => (prev + 1) % 8);
+  //   };
+
+  //   const rotateCounterClockwise = () => {
+  //     setActiveIndex((prev) => (prev - 1 + 8) % 8);
+  //   };
+
+  //   const selectInner = () => {
+  //     setPassword((prev) => prev + characters[activeIndex].inner);
+  //   };
+
+  //   const selectOuter = () => {
+  //     setPassword((prev) => prev + characters[activeIndex].outer);
+  //   };
+
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-screen space-y-4">
+  //       {/* SVG Wheel */}
+  //       <svg width="300" height="300" viewBox="0 0 200 200">
+  //         {/* Main Circle */}
+  //         <circle cx="100" cy="100" r="95" stroke="black" strokeWidth="4" fill="white" />
+
+  //         {/* Sections */}
+  //         {[...Array(8)].map((_, index) => {
+  //           const angle = (360 / 8) * index;
+  //           const x1 = 100 + 95 * Math.cos((angle * Math.PI) / 180);
+  //           const y1 = 100 + 95 * Math.sin((angle * Math.PI) / 180);
+  //           const x2 = 100 + 95 * Math.cos(((angle + 45) * Math.PI) / 180);
+  //           const y2 = 100 + 95 * Math.sin(((angle + 45) * Math.PI) / 180);
+
+  //           return (
+  //             <path
+  //               key={index}
+  //               d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
+  //               fill="none"
+  //               stroke={colors[index]}
+  //               strokeWidth="4"
+  //             />
+  //           );
+  //         })}
+
+  //         {/* Partition Lines - Bolder Stroke */}
+  //         {[...Array(8)].map((_, index) => {
+  //           const angle = (360 / 8) * index;
+  //           const x = 100 + 95 * Math.cos((angle * Math.PI) / 180);
+  //           const y = 100 + 95 * Math.sin((angle * Math.PI) / 180);
+
+  //           return <line key={index} x1="100" y1="100" x2={x} y2={y} stroke="black" strokeWidth="4" />;
+  //         })}
+
+  //         {/* Characters Inside Sections */}
+  //         {characters.map((char, index) => {
+  //           const angle = (360 / 8) * (index + 0.5);
+  //           const radian = (angle * Math.PI) / 180;
+  //           const innerX = 100 + 30 * Math.cos(radian);
+  //           const innerY = 100 + 30 * Math.sin(radian);
+  //           const outerX = 100 + 60 * Math.cos(radian);
+  //           const outerY = 100 + 60 * Math.sin(radian);
+
+  //           return (
+  //             <g key={index}>
+  //               <text x={innerX} y={innerY} fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" fill="black">
+  //                 {char.inner}
+  //               </text>
+  //               <text x={outerX} y={outerY} fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" fill="black">
+  //                 {char.outer}
+  //               </text>
+  //             </g>
+  //           );
+  //         })}
+  //       </svg>
+
+  //       {/* Controls */}
+  //       <div className="flex space-x-4">
+  //         <button onClick={rotateCounterClockwise} className="px-4 py-2 bg-gray-700 text-white rounded">
+  //           ⬅ Counterclockwise
+  //         </button>
+  //         <button onClick={rotateClockwise} className="px-4 py-2 bg-gray-700 text-white rounded">
+  //           Clockwise ➡
+  //         </button>
+  //       </div>
+
+  //       <div className="flex space-x-4">
+  //         <button onClick={selectInner} className="px-4 py-2 bg-blue-500 text-white rounded">
+  //           Select Inner
+  //         </button>
+  //         <button onClick={selectOuter} className="px-4 py-2 bg-green-500 text-white rounded">
+  //           Select Outer
+  //         </button>
+  //       </div>
+
+  //       {/* Password Display */}
+  //       <div className="flex flex-col items-center">
+  //         <input
+  //           type={showPassword ? "text" : "password"}
+  //           value={password}
+  //           readOnly
+  //           className="px-4 py-2 border border-gray-400 rounded text-xl"
+  //           placeholder="Password Input"
+  //         />
+
+  //         {/* Show Password Checkbox */}
+  //         <label className="flex items-center mt-2 space-x-2">
+  //           <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
+  //           <span>Show Password</span>
+  //         </label>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+  // export default ColorWheel;
+
+
+
+
+
+  // this is working aas needed but the ui is not good
+
+//   import { useState, useEffect } from 'react';
+//   // import { Button, Input, Checkbox, Tooltip, IconButton } from '@shadcn/ui';
+//   import { Button } from '@/components/ui/button';
+//   import { Input } from '@/components/ui/input';
+//   import { Checkbox } from '@/components/ui/checkbox';
+//   import { Tooltip } from '@/components/ui/tooltip';
+  
+//   // import { useState, useEffect } from 'react';
+// // import { Button, Input, Checkbox, Tooltip, IconButton } from '@shadcn/ui';
+// import Link from 'next/link';
+// import Image from 'next/image';
+
+// const ColorWheel = () => {
+//   const [counter, setCounter] = useState(0);
+//   const [get, setGet] = useState(0);
+//   const [password, setPassword] = useState('');
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [email, setEmail] = useState('');
+//   const [selectedColor, setSelectedColor] = useState('');
+
+//   const colorMap = {
+//     yellow: 0,
+//     orange: 1,
+//     black: 2,
+//     red: 3,
+//     pink: 4,
+//     purple: 5,
+//     green: 6,
+//     blue: 7,
+//   };
+
+//   const outerloop = [4, 6, 8, 'a', 'd', 'e', 'g', 2];
+//   const innerloop = [5, 7, 1, 'b', 'c', 'f', 'h', 3];
+
+//   const srcArray = [
+//     '/rotatingimage/cercal0.jpg',
+//     '/rotatingimage/cercal1.jpg',
+//     '/rotatingimage/cercal2.jpg',
+//     '/rotatingimage/cercal3.jpg',
+//     '/rotatingimage/cercal4.jpg',
+//     '/rotatingimage/cercal5.jpg',
+//     '/rotatingimage/cercal6.jpg',
+//     '/rotatingimage/cercal7.jpg',
+//   ];
+
+//   useEffect(() => {
+//     const color = 'black'; // Example fetched color (replace with actual session value)
+//     const email = 'user@example.com'; // Example email (replace with actual session value)
+//     setEmail(email);
+//     handleColor(color);
+//   }, []);
+
+//   const handleColor = (color) => {
+//     setSelectedColor(color);
+//     setGet(colorMap[color] || 0);
+//   };
+
+//   const rotateClockwise = () => {
+//     setCounter((prev) => (prev + 1) % 8);
+//     setGet((prev) => (prev + 1) % 8);
+//   };
+
+//   const rotateCounterClockwise = () => {
+//     setCounter((prev) => (prev - 1 + 8) % 8);
+//     setGet((prev) => (prev - 1 + 8) % 8);
+//   };
+
+//   const selectInner = () => {
+//     setPassword((prev) => prev + innerloop[get]);
+//   };
+
+//   const selectOuter = () => {
+//     setPassword((prev) => prev + outerloop[get]);
+//   };
+
+//   const togglePasswordVisibility = () => {
+//     setShowPassword((prev) => !prev);
+//   };
+
+//   const validatePassword = (e) => {
+//     e.preventDefault();
+//     if (password === '') {
+//       alert('Password cannot be empty. Please fill in the password.');
+//       return false;
+//     }
+//     alert('Password entered: ' + password);
+//     return true;
+//   };
+
+//   const handleBackspace = () => {
+//     setPassword(password.slice(0, -1)); // Removes the last character
+//   };
+
+//   return (
+//     <div className="login-container">
+//       <div className="login-form">
+//         <header className="login-header">
+//           <h1 className="login-title">
+//             Color Band Security System
+//           </h1>
+//         </header>
+
+//         <div className="email-input">
+//           <label>Email ID:</label>
+//           <Input
+//             type="email"
+//             value={email}
+//             readOnly
+//             className="input-field"
+//             variant="outline"
+//           />
+//         </div>
+
+//         <div className="image-container">
+//           <Image
+//             src={srcArray[counter]}
+//             alt="Color Wheel"
+//             width={300}
+//             height={300}
+//             className="wheel-image"
+//           />
+//         </div>
+
+//         <div className="controls">
+//           <Button
+//             onClick={rotateCounterClockwise}
+//             variant="outline"
+//             className="control-button"
+//           >
+//             ⏪
+//           </Button>
+//           <Button
+//             onClick={rotateClockwise}
+//             variant="outline"
+//             className="control-button"
+//           >
+//             ⏩
+//           </Button>
+//         </div>
+
+//         <div className="orbit-controls">
+//           <Button
+//             onClick={selectInner}
+//             variant="outline"
+//             className="orbit-button"
+//           >
+//             Inner Orbit
+//           </Button>
+//           <Button
+//             onClick={selectOuter}
+//             variant="outline"
+//             className="orbit-button"
+//           >
+//             Outer Orbit
+//           </Button>
+//         </div>
+
+//         <form onSubmit={validatePassword} className="password-form">
+//           <div className="password-input-container">
+//             <label>Enter Password:</label>
+//             <Input
+//               type={showPassword ? 'text' : 'password'}
+//               value={password}
+//               readOnly
+//               className="password-input"
+//               variant="outline"
+//             />
+//             <Checkbox
+//               onCheckedChange={togglePasswordVisibility}
+//               className="show-password-checkbox"
+//             />
+//             <span>Show Password</span>
+//           </div>
+
+//           <div className="button-container">
+//             <Button
+//               type="submit"
+//               variant="primary"
+//               className="submit-button"
+//             >
+//               Login
+//             </Button>
+//             <Button
+//               type="button"
+//               onClick={handleBackspace}
+//               variant="destructive"
+//               className="backspace-button"
+//             >
+//               ⌫
+//             </Button>
+//             <Link href="/signup" className="signup-link">
+//               <Button variant="link" className="signup-button">
+//                 Don't have an account? Sign Up
+//               </Button>
+//             </Link>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ColorWheel;
+
+
+// "use client";
+// import { useState, useEffect } from "react";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { Card } from "@/components/ui/card";
+// import Image from "next/image";
+// import Link from "next/link";
+
+// const ColorWheel = () => {
+//   const [counter, setCounter] = useState(0);
+//   const [get, setGet] = useState(0);
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [email, setEmail] = useState("");
+//   const [selectedColor, setSelectedColor] = useState("");
+
+//   const colorMap = {
+//     yellow: 0,
+//     orange: 1,
+//     black: 2,
+//     red: 3,
+//     pink: 4,
+//     purple: 5,
+//     green: 6,
+//     blue: 7,
+//   };
+
+//   const outerloop = [4, 6, 8, "a", "d", "e", "g", 2];
+//   const innerloop = [5, 7, 1, "b", "c", "f", "h", 3];
+
+//   const srcArray = [
+//     "/rotatingimage/cercal0.jpg",
+//     "/rotatingimage/cercal1.jpg",
+//     "/rotatingimage/cercal2.jpg",
+//     "/rotatingimage/cercal3.jpg",
+//     "/rotatingimage/cercal4.jpg",
+//     "/rotatingimage/cercal5.jpg",
+//     "/rotatingimage/cercal6.jpg",
+//     "/rotatingimage/cercal7.jpg",
+//   ];
+
+//   useEffect(() => {
+//     const color = "black"; // Example fetched color (replace with actual session value)
+//     const email = "user@example.com"; // Example email (replace with actual session value)
+//     setEmail(email);
+//     handleColor(color);
+//   }, []);
+
+//   const handleColor = (color) => {
+//     setSelectedColor(color);
+//     setGet(colorMap[color] || 0);
+//   };
+
+//   const rotateClockwise = () => {
+//     setCounter((prev) => (prev + 1) % 8);
+//     setGet((prev) => (prev + 1) % 8);
+//   };
+
+//   const rotateCounterClockwise = () => {
+//     setCounter((prev) => (prev - 1 + 8) % 8);
+//     setGet((prev) => (prev - 1 + 8) % 8);
+//   };
+
+//   const selectInner = () => {
+//     setPassword((prev) => prev + innerloop[get]);
+//   };
+
+//   const selectOuter = () => {
+//     setPassword((prev) => prev + outerloop[get]);
+//   };
+
+//   const togglePasswordVisibility = () => {
+//     setShowPassword((prev) => !prev);
+//   };
+
+//   const validatePassword = (e) => {
+//     e.preventDefault();
+//     if (password === "") {
+//       alert("Password cannot be empty. Please fill in the password.");
+//       return false;
+//     }
+//     alert("Password entered: " + password);
+//     return true;
+//   };
+
+//   const handleBackspace = () => {
+//     setPassword(password.slice(0, -1)); // Removes the last character
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
+//       <Card className="w-full max-w-md shadow-lg p-6 rounded-lg bg-white border border-gray-300">
+//         <header className="text-center mb-6">
+//           <h1 className="text-2xl font-bold text-gray-800">Color Band Security System</h1>
+//         </header>
+
+//         {/* Color Wheel Image */}
+//         <div className="flex justify-center mb-6">
+//           <Image
+//             src={srcArray[counter]}
+//             alt="Color Wheel"
+//             width={250}
+//             height={250}
+//             className="rounded-full border border-gray-300"
+//           />
+//         </div>
+
+//         {/* Buttons for rotating the wheel */}
+//         <div className="flex justify-between mb-4">
+//           <Button
+//             onClick={rotateCounterClockwise}
+//             variant="outline"
+//             className="px-4 py-2 text-black text-lg"
+//           >
+//             ⏪
+//           </Button>
+//           <Button
+//             onClick={rotateClockwise}
+//             variant="outline"
+//             className="px-4 py-2 text-black text-lg"
+//           >
+//             ⏩
+//           </Button>
+//         </div>
+
+//         {/* Orbit selection buttons */}
+//         <div className="flex justify-between mb-4">
+//           <Button
+//             onClick={selectInner}
+//             variant="outline"
+//             className="px-4 py-2 w-1/2 text-black text-sm"
+//           >
+//             Inner Orbit
+//           </Button>
+//           <Button
+//             onClick={selectOuter}
+//             variant="outline"
+//             className="px-4 py-2 w-1/2 text-black text-sm"
+//           >
+//             Outer Orbit
+//           </Button>
+//         </div>
+
+//         {/* Backspace button */}
+//         <div className="flex justify-center mb-4">
+//           <Button
+//             onClick={handleBackspace}
+//             variant="destructive"
+//             className="w-12 py-3 text-black text-lg"
+//           >
+//             ⌫
+//           </Button>
+//         </div>
+
+//         <form onSubmit={validatePassword}>
+//   <div className="mb-4">
+//     <label className="block text-sm font-medium text-gray-700 mb-1">Enter Password:</label>
+//     <Input
+//       type={showPassword ? "text" : "password"}
+//       value={password}
+//       readOnly
+//       variant="outline"
+//       className="w-full"
+//     />
+//   </div>
+
+//   {/* Checkbox to show password */}
+//   <div className="mb-4 flex items-center">
+//     <Checkbox
+//       checked={showPassword}
+//       onCheckedChange={togglePasswordVisibility}
+//       className="mr-2"
+//     />
+//     <label className="text-sm text-gray-700">Show Password</label>
+//   </div>
+
+//   {/* Submit button */}
+//   <div className=" flex justify-center">
+//     <Button type="submit" variant="black" className="w-full py-2 text-white text-lg">
+//       Login
+//     </Button>
+//   </div>
+// </form>
+
+       
+//       </Card>
+//     </div>
+//   );
+// };
+
+// export default ColorWheel;
+
+
+
+"use client";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
+
+const ColorWheel = ({ passwordColor , onPasswordUpdate }) => {
+  const [counter, setCounter] = useState(0);
+  const [get, setGet] = useState(0);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(passwordColor || "");
+
+  const colorMap = {
+    yellow: 0,
+    orange: 1,
+    black: 2,
+    red: 3,
+    pink: 4,
+    purple: 5,
+    green: 6,
+    blue: 7,
+  };
+
+  const outerloop = [4, 6, 8, "a", "d", "e", "g", 2];
+  const innerloop = [5, 7, 1, "b", "c", "f", "h", 3];
+
+  const srcArray = [
+    "/rotatingimage/cercal0.jpg",
+    "/rotatingimage/cercal1.jpg",
+    "/rotatingimage/cercal2.jpg",
+    "/rotatingimage/cercal3.jpg",
+    "/rotatingimage/cercal4.jpg",
+    "/rotatingimage/cercal5.jpg",
+    "/rotatingimage/cercal6.jpg",
+    "/rotatingimage/cercal7.jpg",
+  ];
+
+  useEffect(() => {
+    handleColor(passwordColor);
+  }, [passwordColor]);
+
+  const handleColor = (color) => {
+    setSelectedColor(color);
+    setGet(colorMap[color] || 0);
+  };
 
   const rotateClockwise = () => {
-    setActiveIndex((prev) => (prev + 1) % 8);
+    setCounter((prev) => (prev + 1) % 8);
+    setGet((prev) => (prev + 1) % 8);
   };
 
   const rotateCounterClockwise = () => {
-    setActiveIndex((prev) => (prev - 1 + 8) % 8);
+    setCounter((prev) => (prev - 1 + 8) % 8);
+    setGet((prev) => (prev - 1 + 8) % 8);
   };
 
   const selectInner = () => {
-    setPassword((prev) => prev + characters[activeIndex].inner);
+    const newPassword = password + innerloop[get];
+    setPassword(newPassword);
+    onPasswordUpdate(newPassword); // Send updated password to parent
   };
 
   const selectOuter = () => {
-    setPassword((prev) => prev + characters[activeIndex].outer);
+    const newPassword = password + outerloop[get];
+    setPassword(newPassword);
+    onPasswordUpdate(newPassword); // Send updated password to parent
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const validatePassword = (e) => {
+    e.preventDefault();
+    if (password === "") {
+      alert("Password cannot be empty. Please fill in the password.");
+      return false;
+    }
+    alert("Password entered: " + password);
+    return true;
+  };
+
+  const handleBackspace = () => {
+    setPassword(password.slice(0, -1));
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen space-y-4">
-      {/* SVG Wheel */}
-      <svg width="300" height="300" viewBox="0 0 200 200">
-        {/* Main Circle */}
-        <circle cx="100" cy="100" r="95" stroke="black" strokeWidth="4" fill="white" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
+      <Card className="w-full max-w-md shadow-lg p-6 rounded-lg bg-white border border-gray-300">
+        <header className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">Color Band Security System</h1>
+        </header>
 
-        {/* Sections */}
-        {[...Array(8)].map((_, index) => {
-          const angle = (360 / 8) * index;
-          const x1 = 100 + 95 * Math.cos((angle * Math.PI) / 180);
-          const y1 = 100 + 95 * Math.sin((angle * Math.PI) / 180);
-          const x2 = 100 + 95 * Math.cos(((angle + 45) * Math.PI) / 180);
-          const y2 = 100 + 95 * Math.sin(((angle + 45) * Math.PI) / 180);
+        <div className="flex justify-center mb-6">
+          <Image
+            src={srcArray[counter]}
+            alt="Color Wheel"
+            width={250}
+            height={250}
+            className="rounded-full border border-gray-300"
+          />
+        </div>
 
-          return (
-            <path
-              key={index}
-              d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
-              fill="none"
-              stroke={colors[index]}
-              strokeWidth="4"
-            />
-          );
-        })}
+        <div className="flex justify-between mb-4">
+          <Button onClick={rotateCounterClockwise} variant="outline" className="px-4 py-2 text-black text-lg">
+            ⏪
+          </Button>
+          <Button onClick={rotateClockwise} variant="outline" className="px-4 py-2 text-black text-lg">
+            ⏩
+          </Button>
+        </div>
 
-        {/* Section Lines */}
-        {[...Array(8)].map((_, index) => {
-          const angle = (360 / 8) * index;
-          const x = 100 + 95 * Math.cos((angle * Math.PI) / 180);
-          const y = 100 + 95 * Math.sin((angle * Math.PI) / 180);
+        <div className="flex justify-between mb-4">
+          <Button onClick={selectInner} variant="outline" className="px-4 py-2 w-1/2 text-black text-sm">
+            Inner Orbit
+          </Button>
+          <Button onClick={selectOuter} variant="outline" className="px-4 py-2 w-1/2 text-black text-sm">
+            Outer Orbit
+          </Button>
+        </div>
 
-          return <line key={index} x1="100" y1="100" x2={x} y2={y} stroke="black" strokeWidth="2" />;
-        })}
+        <div className="flex justify-center mb-4">
+          <Button onClick={handleBackspace} variant="destructive" className="w-12 py-3 text-black text-lg">
+            ⌫
+          </Button>
+        </div>
 
-        {/* Characters Inside Sections */}
-        {characters.map((char, index) => {
-          const angle = (360 / 8) * (index + 0.5);
-          const radian = (angle * Math.PI) / 180;
-          const innerX = 100 + 30 * Math.cos(radian);
-          const innerY = 100 + 30 * Math.sin(radian);
-          const outerX = 100 + 60 * Math.cos(radian);
-          const outerY = 100 + 60 * Math.sin(radian);
+        <form onSubmit={validatePassword}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Enter Password:</label>
+            <Input type={showPassword ? "text" : "password"} value={password} readOnly variant="outline" className="w-full" />
+          </div>
 
-          return (
-            <g key={index}>
-              <text x={innerX} y={innerY} fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" fill="black">
-                {char.inner}
-              </text>
-              <text x={outerX} y={outerY} fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" fill="black">
-                {char.outer}
-              </text>
-            </g>
-          );
-        })}
+          <div className="mb-4 flex items-center">
+            <Checkbox checked={showPassword} onCheckedChange={togglePasswordVisibility} className="mr-2" />
+            <label className="text-sm text-gray-700">Show Password</label>
+          </div>
 
-        {/* Active Section Border - Draw Last So It's on Top */}
-        {(() => {
-          const angle = (360 / 8) * activeIndex;
-          const x1 = 100 + 95 * Math.cos((angle * Math.PI) / 180);
-          const y1 = 100 + 95 * Math.sin((angle * Math.PI) / 180);
-          const x2 = 100 + 95 * Math.cos(((angle + 45) * Math.PI) / 180);
-          const y2 = 100 + 95 * Math.sin(((angle + 45) * Math.PI) / 180);
-
-          return (
-            <path
-              d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
-              fill="none"
-              stroke="black"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          );
-        })()}
-      </svg>
-
-      {/* Controls */}
-      <div className="flex space-x-4">
-        <button onClick={rotateCounterClockwise} className="px-4 py-2 bg-gray-700 text-white rounded">
-          ⬅ Counterclockwise
-        </button>
-        <button onClick={rotateClockwise} className="px-4 py-2 bg-gray-700 text-white rounded">
-          Clockwise ➡
-        </button>
-      </div>
-
-      <div className="flex space-x-4">
-        <button onClick={selectInner} className="px-4 py-2 bg-blue-500 text-white rounded">
-          Select Inner
-        </button>
-        <button onClick={selectOuter} className="px-4 py-2 bg-green-500 text-white rounded">
-          Select Outer
-        </button>
-      </div>
-
-      {/* Password Display */}
-      <div className="flex flex-col items-center">
-        <input
-          type={showPassword ? "text" : "password"}
-          value={password}
-          readOnly
-          className="px-4 py-2 border border-gray-400 rounded  text-xl"
-          placeholder="Password Input"
-        />
-
-        {/* Show Password Checkbox */}
-        <label className="flex items-center mt-2 space-x-2">
-          <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
-          <span>Show Password</span>
-        </label>
-      </div>
+          <div className="flex justify-center">
+            <Button type="submit" variant="black" className="w-full py-2 text-white text-lg">
+              Login
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 };
 
 export default ColorWheel;
-
-
