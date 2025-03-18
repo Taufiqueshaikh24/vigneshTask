@@ -1,74 +1,238 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { Button } from "@/components/ui/button";
+// import {
+//   DropdownMenu,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+//   DropdownMenuContent,
+// } from "@/components/ui/dropdown-menu";
+
+// const Header = () => {
+//   const router = useRouter();
+//   const [user, setUser] = useState(null);
+
+//   useEffect(() => {
+//     fetchUserDetails();
+//   }, []);
+
+//   const fetchUserDetails = async () => {
+//     try {
+//       console.log("🔹 Fetching user details...");
+
+//       const response = await fetch("/api/v1/me", {
+//         method: "GET",
+//         credentials: "include", // Ensure cookies are sent for authentication
+//       });
+
+//       if (!response.ok) {
+//         console.warn("⚠ User not authenticated");
+//         return;
+//       }
+
+//       const data = await response.json();
+//       console.log("✅ User Data Fetched:", data);
+//       setUser(data);
+//     } catch (error) {
+//       console.error("❌ Error fetching user details:", error);
+//     }
+//   };
+
+//   const handleLogout = async () => {
+//     try {
+//       await fetch("/api/v1/logout", { method: "POST", credentials: "include" });
+
+//       console.log("✅ User logged out");
+//       setUser(null);
+//       router.push("/login"); // Redirect to login after logout
+//     } catch (error) {
+//       console.error("❌ Error during logout:", error);
+//     }
+//   };
+
+//   const renderUserInitials = (name) => {
+//     if (!name) return "G"; // Default to "G" for Guest
+//     return name
+//       .split(" ")
+//       .map((word) => word[0]?.toUpperCase())
+//       .join("");
+//   };
+
+//   return (
+//     <header className="w-full p-4 shadow-md flex justify-between items-center bg-white text-black">
+//       <h1 className="text-xl font-semibold">My App</h1>
+
+//       <div className="flex items-center gap-4">
+//         {user ? (
+//           <DropdownMenu>
+//             <DropdownMenuTrigger asChild>
+//               <button className="w-10 h-10 rounded-full bg-gray-500 text-white flex items-center justify-center text-lg font-semibold">
+//                 {renderUserInitials(user.name)}
+//               </button>
+//             </DropdownMenuTrigger>
+
+//             <DropdownMenuContent align="end">
+//               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+//             </DropdownMenuContent>
+//           </DropdownMenu>
+//         ) : (
+//           <Button onClick={() => router.push("/login")} className="bg-black text-white hover:bg-gray-800">
+//             Login
+//           </Button>
+//         )}
+//       </div>
+//     </header>
+//   );
+// };
+
+// export default Header;
+
+
+
+
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Loader2, User, LogOut, HomeIcon } from "lucide-react";
 
-const Header = () => {
-  const router = useRouter();
+export default function Header() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const router = useRouter();
 
-  // Get user info from the JWT token or NextAuth session
   useEffect(() => {
-    const token = document.cookie.split(";").find(cookie => cookie.trim().startsWith("token=")); // Example for JWT token
-    if (token) {
-      const decodedToken = JSON.parse(atob(token.split("=")[1].split(".")[1]));
-      setUser({ name: decodedToken.name, email: decodedToken.email });
+    async function fetchUser() {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/v1/me", { credentials: "include" });
+        const data = await res.json();
+        if (res.ok) {
+          setUser(data);
+        }
+      } catch (error) {
+        console.error("User fetch failed:", error);
+        toast.error("Failed to fetch user");
+      } finally {
+        setLoading(false);
+      }
     }
+    fetchUser();
   }, []);
 
- // Function to handle logout
-const handleLogout = () => {
-    // Clear all cookies related to the user (JWT and NextAuth session)
-    document.cookie
-      .split(";")
-      .forEach((cookie) => {
-        const cookieName = cookie.split("=")[0].trim();
-        document.cookie = `${cookieName}=; Max-Age=-1; path=/;`;
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true);
+      const res = await fetch("/api/v1/logout", {
+        method: "POST",
+        credentials: "include",
       });
-  
-    // Redirect to login page
-    router.push("/login");
+      if (res.ok) {
+        toast.success("Logged out successfully");
+        router.push("/login");
+      } else {
+        toast.error("Logout failed");
+      }
+    } catch (error) {
+      toast.error("Logout error");
+    } finally {
+      setLoggingOut(false);
+    }
   };
-  
 
-  const renderUserInitials = (name) => {
-    const initials = name
-      .split(" ")
-      .map((word) => word[0].toUpperCase())
-      .join("");
-    return initials;
-  };
+  // Extract initials
+  const initials = user?.name
+  ? user.name.charAt(0).toUpperCase() // Only take the first letter of the name
+  : "U";
+
+
+  // Define a set of colors
+  const colors = [
+    "bg-red-500",
+    "bg-green-500",
+    "bg-blue-500",
+    "bg-yellow-500",
+    "bg-purple-500",
+    "bg-pink-500",
+    "bg-teal-500",
+    "bg-orange-500",
+  ];
+
+  // Generate a color based on the first letter of the initials
+  const colorIndex = initials.charCodeAt(0) % colors.length;
+  const bgColor = colors[colorIndex];
 
   return (
-    <header className="w-full p-4 shadow-md flex justify-between items-center bg-white text-black">
-      {/* App Title */}
-      <h1 className="text-xl font-semibold">My App</h1>
+    <>
+      {loggingOut && (
+        <div className="fixed inset-0 flex justify-center items-center bg-white z-[9999]">
+          <Loader2 className="animate-spin text-black w-10 h-10 " />
+        </div>
+      )}
 
-      <div className="flex items-center gap-4">
-        {/* Display user profile initials */}
-        <div className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-full bg-gray-500 text-white flex items-center justify-center text-lg font-semibold">
-  {user ? renderUserInitials(user.name) : ""}
-</div>
+      <header className="fixed top-0 left-0 w-full z-10 bg-background shadow-md px-6 py-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-primary">MyApp</h1>
 
-          {/* Dropdown for user profile and logout */}
+        {loading ? (
+          <Loader2 className="animate-spin w-6 h-6 text-gray-700" />
+        ) : user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="link" size="sm" className="text-black">
-                {user ? user.name : "Guest"}
-              </Button>
+              <button className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-border">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage || "/default-avatar.png"}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <span className={`w-full h-full flex items-center justify-center text-white  ${bgColor}`}>
+                    {initials}
+                  </span>
+                )}
+              </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="w-48 bg-popover border border-border rounded-lg shadow-lg">
+              {/* Home Item */}
+              <DropdownMenuItem
+                onClick={() => router.push("/")}
+                className="hover:bg-accent px-4 py-2 flex items-center gap-2"
+              >
+                <HomeIcon size={18} className="text-gray-600" /> Home
+              </DropdownMenuItem>
+
+              {/* Profile Item */}
+              <DropdownMenuItem
+                onClick={() => router.push("/profile")}
+                className="hover:bg-accent px-4 py-2 flex items-center gap-2"
+              >
+                <User size={18} className="text-gray-600" /> Profile
+              </DropdownMenuItem>
+
+              {/* Logout Item */}
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="hover:bg-accent px-4 py-2 flex items-center gap-2"
+              >
+                <LogOut size={18} className="text-gray-600" /> Sign Out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-      </div>
-    </header>
+        ) : null}
+      </header>
+    </>
   );
-};
-
-export default Header;
+}

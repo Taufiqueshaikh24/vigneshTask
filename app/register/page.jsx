@@ -158,6 +158,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 const RegistrationPage = () => {
   const router = useRouter();
@@ -291,7 +292,7 @@ const RegistrationPage = () => {
             <label htmlFor="showPassword" className="ml-2 text-sm text-gray-700">Show Password</label>
           </div>
           <Button type="submit" className="w-full bg-black py-2 text-white" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+          {loading ? <Loader2 className="animate-spin h-5 w-5 text-white" /> : "Register"}
           </Button>
         </form>
         <div className="mt-4 text-center">
