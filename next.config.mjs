@@ -6,14 +6,38 @@
 
 
 
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//     experimental: {
+//       serverActions: {
+//         bodySizeLimit: "50mb", // Increase the body size limit
+//       },
+//     },
+//   };
+  
+//   export default nextConfig;
+  
+
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-      serverActions: {
-        bodySizeLimit: "50mb", // Increase the body size limit
-      },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "50mb", // Increase the body size limit
     },
-  };
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // Disables eslint during the build (optional)
+  },
+  productionBrowserSourceMaps: true, // Enables source maps in production for debugging (optional)
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // Modify Webpack settings in development mode if necessary
+    }
+    return config;
+  },
   
-  export default nextConfig;
-  
+  // Add any other custom settings or plugins here
+};
+
+export default nextConfig;
