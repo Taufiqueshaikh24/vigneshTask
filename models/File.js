@@ -42,7 +42,7 @@
 
 
 
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
 const fileSchema = new mongoose.Schema(
@@ -65,4 +65,6 @@ const fileSchema = new mongoose.Schema(
 //   next();
 // });
 
-module.exports = mongoose.model("File", fileSchema);
+const File = mongoose.models.File || mongoose.model("File", fileSchema);
+
+export default File;

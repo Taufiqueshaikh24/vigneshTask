@@ -32,7 +32,7 @@ export async function POST(req) {
     const resetUrl = `${process.env.PROTOCOL}://${process.env.DOMAIN_NAME}/resetpassword?token=${resetToken}&email=${email}`;
     console.log(resetUrl);
 
-    // await sendEmail(user.email, "Password Reset Request", `Click here to reset your password: ${resetUrl}`);
+    await sendEmail(user.email, 'reset', user.name, resetUrl);
 
     return NextResponse.json({ message: "Password reset email sent." }, { status: 200 });
   } catch (error) {
