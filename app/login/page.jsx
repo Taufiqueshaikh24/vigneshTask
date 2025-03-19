@@ -208,6 +208,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ColorWheelLogin from "../Components/Wheel";
 import { Loader2 } from "lucide-react";
+import Image from "next/image"
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -287,7 +288,6 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
       <Card className="w-full max-w-md shadow-lg p-8 rounded-lg bg-white border border-gray-200">
         <h2 className="text-3xl font-semibold text-center text-black mb-6">Login</h2>
-
         {!emailVerified ? (
           <>
             <Input
@@ -348,3 +348,6 @@ const Login = () => {
 };
 
 export default Login;
+
+
+

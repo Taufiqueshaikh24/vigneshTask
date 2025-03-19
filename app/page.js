@@ -28,6 +28,7 @@
 import Header from "./Components/Header";
 import FileUpload from "./Components/FileUpload";
 import FileList from "./Components/FileList";
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -41,7 +42,7 @@ export default function Home() {
         </div>
 
         {/* File List Section (Centered on both axes) */}
-        <div className="flex justify-center items-center w-full  mt-4">
+        <div className="flex justify-center items-center w-full  mt-4 mb-10">
           <FileList />
         </div>
       </main>

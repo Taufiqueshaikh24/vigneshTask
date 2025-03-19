@@ -150,6 +150,7 @@ export default function FileUpload({ userId }) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("userId", userId);
+    formData.append("contentType", file.type); // ✅ Ensures correct MIME type
 
     try {
       const res = await fetch("/api/v1/upload", {
@@ -168,6 +169,7 @@ export default function FileUpload({ userId }) {
 
         setTimeout(() => {
           setOpen(false); // Close modal only on success
+          window.location.reload();
         }, 1000);
       } else {
         toast.error(`❌ Error: ${data.message || "Upload failed"}`, {
