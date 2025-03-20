@@ -381,17 +381,17 @@ const colorMap = {
   blue: 7,
 };
 
-export default function ShareModal({ fileId, filename, open, onClose }) {
+export default function ShareModal({ fileId, filename, open, onClose  }) {
   const [password, setPassword] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const [shareLink, setShareLink] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [generated , setGenerated] = useState("")
 
   const handleClose = () => {
     setPassword("");
     setSelectedColor("");
-    setShareLink(null);
+    // setShareLink(null);
     onClose();
   };
 
@@ -421,7 +421,10 @@ export default function ShareModal({ fileId, filename, open, onClose }) {
       if (!linkRes.ok) throw new Error("Failed to generate link!");
 
       const { url } = await linkRes.json();
-      setShareLink(`${window.location.origin}${url}`);
+      
+      const fullUrl = `${window.location.origin}${url}`;
+      console.log("uurl", fullUrl);
+      setGenerated(fullUrl);
 
       // Show success toast with the link and copy it to the clipboard
       toast.success("Shareable link generated!");
