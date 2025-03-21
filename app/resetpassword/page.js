@@ -331,6 +331,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -391,8 +392,15 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
-      <Card className="w-full max-w-md shadow-lg p-8 rounded-lg bg-white border border-gray-200">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-white p-6">
+      <button 
+      onClick={() => router.back()} 
+      className="absolute cursor-pointer top-6 left-6 flex items-center text-gray-700 hover:text-black"
+    >
+      <ArrowLeft className="h-5 w-5 mr-1" />
+      Back
+    </button>
+      <Card className="w-full cursor-pointer max-w-md shadow-lg p-8 rounded-lg bg-white border border-gray-200">
         <h2 className="text-3xl font-semibold text-center text-black mb-6">Reset Password</h2>
 
         <form onSubmit={handleResetPassword} className="space-y-4">
@@ -435,3 +443,8 @@ const ResetPasswordPage = () => {
 };
 
 export default ResetPasswordPage;
+
+
+
+
+

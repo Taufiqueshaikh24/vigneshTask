@@ -290,6 +290,8 @@ import { Eye, Download, Trash2, Share2 , X, ScanSearch } from "lucide-react"; //
 import { Dialog, DialogContent, DialogClose , DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import ShareModal from "../Components/ShareModel"
+import { FaEye, FaRegEye } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 
 
@@ -515,7 +517,7 @@ export default function FileTable() {
 
 
                       <Button variant="ghost" className="cursor-pointer flex items-center gap-1" size="icon">
-                        <Eye className="w-5 h-5 text-yellow-600" />
+                        <FaRegEye className="w-5 h-5 text-yellow-600" />
                         <span className="text-sm font-medium">{accessCounts[file._id] || 0}</span>
                       </Button>
 

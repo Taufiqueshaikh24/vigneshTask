@@ -21,6 +21,9 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ["source.unsplash.com"], // ✅ Use domains instead of remotePatterns
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "50mb", // Increase the body size limit

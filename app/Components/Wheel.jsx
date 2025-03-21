@@ -1281,6 +1281,8 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import { FaArrowRotateRight } from "react-icons/fa6";
+import { FaArrowRotateLeft } from "react-icons/fa6";
 import Link from "next/link";
 
 const ColorWheel = ({ passwordColor , onPasswordUpdate }) => {
@@ -1383,10 +1385,10 @@ const ColorWheel = ({ passwordColor , onPasswordUpdate }) => {
 
         <div className="flex justify-between mb-4">
           <Button onClick={rotateCounterClockwise} variant="outline" className="px-4 py-2 text-black text-lg">
-            ⏪
+          <FaArrowRotateLeft size={20} />
           </Button>
           <Button onClick={rotateClockwise} variant="outline" className="px-4 py-2 text-black text-lg">
-            ⏩
+          <FaArrowRotateRight size={20} />
           </Button>
         </div>
 

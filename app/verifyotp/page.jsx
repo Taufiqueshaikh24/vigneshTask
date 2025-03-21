@@ -167,6 +167,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { ArrowLeft } from "lucide-react";
+
+
 
 const VerifyOTPPage = () => {
   const router = useRouter();
@@ -175,11 +178,11 @@ const VerifyOTPPage = () => {
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(120); // 2 minutes
-
   // Set email from search params once the component has mounted
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const emailParam = urlParams.get("email");
+    const register = urlParams.get("register");
     if (emailParam) {
       setEmail(emailParam);
     }
@@ -282,48 +285,62 @@ const VerifyOTPPage = () => {
   if (!email) return <div>Loading...</div>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="w-96 p-6 shadow-lg rounded-lg bg-white">
-        <h2 className="text-xl font-semibold text-center">Verify OTP</h2>
-        <p className="text-gray-600 text-sm text-center mb-4">
-          Enter the OTP sent to <span className="font-semibold">{email}</span>
-        </p>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 relative">
+    {/* 🔙 Back Button */}
+    <button 
+      onClick={() => router.back()} 
+      className="absolute top-6 left-6 flex cursor-pointer items-center text-gray-700 hover:text-black"
+    >
+      <ArrowLeft className="h-5 w-5 mr-1" />
+      Back
+    </button>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <Input
-            type="text"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={handleOtpChange}
-            maxLength={6}
-            className="text-lg"
-            required
-          />
+    <Card className="w-96 p-6 shadow-lg rounded-lg bg-white">
+      <h2 className="text-xl font-semibold text-center">Verify OTP</h2>
+      <p className="text-gray-600 text-sm text-center mb-4">
+        Enter the OTP sent to <span className="font-semibold">{email}</span>
+      </p>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Verifying..." : "Verify OTP"}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <Input
+          type="text"
+          placeholder="Enter OTP"
+          value={otp}
+          onChange={handleOtpChange}
+          maxLength={6}
+          className="text-lg"
+          required
+        />
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Verifying..." : "Verify OTP"}
+        </Button>
+      </form>
+
+      <div className="text-center mt-4">
+        {countdown > 0 ? (
+          <p className="text-gray-500 text-sm">
+            Resend OTP in <span className="font-semibold">{formattedTime}</span>
+          </p>
+        ) : (
+          <Button
+            variant="link"
+            className="text-blue-600 underline"
+            onClick={handleResendOTP}
+            disabled={resendLoading}
+          >
+            {resendLoading ? "Resending..." : "Resend OTP"}
           </Button>
-        </form>
-
-        <div className="text-center mt-4">
-          {countdown > 0 ? (
-            <p className="text-gray-500 text-sm">
-              Resend OTP in <span className="font-semibold">{formattedTime}</span>
-            </p>
-          ) : (
-            <Button
-              variant="link"
-              className="text-blue-600 underline"
-              onClick={handleResendOTP}
-              disabled={resendLoading}
-            >
-              {resendLoading ? "Resending..." : "Resend OTP"}
-            </Button>
-          )}
-        </div>
-      </Card>
-    </div>
+        )}
+      </div>
+    </Card>
+  </div>
   );
 };
 
 export default VerifyOTPPage;
+
+
+
+
+

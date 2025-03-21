@@ -70,7 +70,9 @@ export async function middleware(req) {
     const pathname = nextUrl.pathname;
     const token = cookies.get("token")?.value;
 
-    const authRoutes = ["/login", "/register", "/verifyotp", "/forgotpassword", "/resetpassword"];
+    const authRoutes = ["/login", "/register", "/verifyotp", "/forgotpassword", "/resetpassword" , "/loginotp"
+        , '/home'
+    ];
 
     // Function to check if token is expired
     const isTokenExpired = (token) => {
@@ -87,7 +89,7 @@ export async function middleware(req) {
 
     // If token exists but is expired, clear it and redirect to login
     if (token && isTokenExpired(token)) {
-        response = NextResponse.redirect(new URL("/login", req.url));
+        response = NextResponse.redirect(new URL("/home", req.url));
         response.headers.append(
             "Set-Cookie",
             "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Strict"
@@ -105,7 +107,7 @@ export async function middleware(req) {
 
     // If user does NOT have a token and is trying to access a protected route, redirect to login
     if (!token && !authRoutes.includes(pathname) && !isAccessRoute) {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(new URL("/home", req.url));
     }
 
     return response;

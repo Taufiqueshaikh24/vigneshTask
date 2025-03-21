@@ -250,8 +250,46 @@ const Login = () => {
     setPassword(newPassword);
   };
 
-  const handleLogin = async () => {
+  // const handleLogin = async () => {
 
+  //   if (!emailVerified) {
+  //     toast.error("Please verify your email first.");
+  //     return;
+  //   }
+  //   if (!password) {
+  //     toast.error("Please enter your password.");
+  //     return;
+  //   }
+  //   setLoading(true)
+
+  //   try {
+  //     const response = await fetch("/api/v1/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ email, password }),
+  //       // credentials: "include", // Ensures cookies are sent & received
+  //     });
+
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       toast.success("Verify Your Otp!");
+  //       router.push(`/verifyotp?email=${email}&type=login`);
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("An error occurred while logging in.");
+  //   }finally {
+  //        setLoading(false);
+  //   }
+  // };
+
+
+
+
+
+
+  const handleLogin = async () => {
     if (!emailVerified) {
       toast.error("Please verify your email first.");
       return;
@@ -260,90 +298,120 @@ const Login = () => {
       toast.error("Please enter your password.");
       return;
     }
-    setLoading(true)
-
+    
+    setLoading(true);
+  
     try {
-      const response = await fetch("/api/v1/login", {
+      // 🔹 1st API Request: Login
+      const loginResponse = await fetch("/api/v1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include", // Ensures cookies are sent & received
       });
-
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Login successful!");
-        router.push("/");
-      } else {
-        toast.error(data.message);
+  
+      const loginData = await loginResponse.json();
+      if (!loginResponse.ok) {
+        toast.error(loginData.message || "Login failed.");
+        setLoading(false);
+        return;
       }
+  
+      // 🔹 2nd API Request: Send OTP for Login
+      const otpResponse = await fetch("/api/v1/login-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+  
+      const otpData = await otpResponse.json();
+      if (!otpResponse.ok) {
+        toast.error(otpData.message || "Failed to send OTP.");
+        setLoading(false);
+        return;
+      }
+  
+      // ✅ If both requests succeed, navigate to OTP verification page
+      toast.success("Verify Your OTP!");
+      router.push(`/loginotp?email=${email}`);
     } catch (error) {
       toast.error("An error occurred while logging in.");
-    }finally {
-         setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6">
-      <Card className="w-full max-w-md shadow-lg p-8 rounded-lg bg-white border border-gray-200">
-        <h2 className="text-3xl font-semibold text-center text-black mb-6">Login</h2>
-        {!emailVerified ? (
-          <>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300"
+    <div className="flex items-center justify-center min-h-screen bg-white p-4">
+    <Card className="w-full max-w-md shadow-lg p-6 rounded-lg bg-white border border-gray-200">
+      <h2 className="text-2xl font-semibold text-center text-black mb-4">Login</h2>
+  
+      {!emailVerified ? (
+        <>
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-gray-300"
+          />
+  
+          <Button
+            onClick={handleVerifyEmail}
+            className="w-full bg-black text-white hover:bg-gray-800 flex items-center justify-center"
+          >
+            {loading2 ? <Loader2 className="animate-spin h-5 w-5 text-white" /> : "Verify Email"}
+          </Button>
+  
+          <div className="text-center mt-3">
+            <Link href="/forgotpassword" className="text-sm font-medium text-black hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+        </>
+      ) : (
+        <>
+          <Input
+            type="email"
+            value={email}
+            readOnly
+            className="w-full border border-gray-300 bg-gray-100 cursor-not-allowed mb-3"
+          />
+  
+          {/* 🔥 Wheel Auth Component */}
+          <div className="mb-4">
+            <ColorWheelLogin 
+              passwordColor={passwordColor} 
+              onPasswordUpdate={handlePasswordUpdate} 
             />
-
-            <Button
-              onClick={handleVerifyEmail}
-              className="w-full mb-4 bg-black text-white hover:bg-gray-800"
-            >
-              {loading2 ? <Loader2 className="animate-spin h-5 w-5 text-white" /> : "Verify Email"}
-            </Button>
-
-            <div className="text-center mt-2">
-              <Link href="/forgotpassword" className="text-sm font-medium text-black hover:underline">
-                Forgot Password?
-              </Link>
-            </div>
-          </>
-        ) : (
-          <>
-            <Input
-              type="email"
-              value={email}
-              readOnly
-              className="w-full mb-4 border border-gray-300 bg-gray-100 cursor-not-allowed"
-            />
-
-            <div className="mb-6">
-              <ColorWheelLogin 
-                passwordColor={passwordColor} 
-                onPasswordUpdate={handlePasswordUpdate} 
-              />
-            </div>
-
-            <Button
-              onClick={handleLogin}
-              className="w-full mb-4 bg-black text-white hover:bg-gray-800"
-            >
-              {loading ? <Loader2 className="animate-spin h-5 w-5 text-white" /> : "Login"}
-            </Button>
-          </>
-        )}
-
-        <div className="text-center mt-4">
-          <span className="text-sm text-gray-600">Don't have an account? </span>
-          <Link href="/register" className="text-sm font-medium text-black hover:underline">
-            Sign Up
-          </Link>
-        </div>
-      </Card>
-    </div>
+          </div>
+  
+          {/* 🛠️ Forgot Password Link under Wheel Auth */}
+          <div className="text-center mb-3">
+            <Link href="/forgotpassword" className="text-sm font-medium text-black hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+  
+          <Button
+            onClick={handleLogin}
+            className="w-full bg-black text-white hover:bg-gray-800 flex items-center justify-center"
+          >
+            {loading ? <Loader2 className="animate-spin h-5 w-5 text-white" /> : "Login"}
+          </Button>
+        </>
+      )}
+  
+      {/* 📌 Sign Up Link */}
+      <div className="text-center mt-4">
+        <span className="text-sm text-gray-600">Don't have an account? </span>
+        <Link href="/register" className="text-sm font-medium text-black hover:underline">
+          Sign Up
+        </Link>
+      </div>
+    </Card>
+  </div>
+  
   );
 };
 

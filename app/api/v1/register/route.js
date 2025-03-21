@@ -36,7 +36,8 @@ export async function POST(req) {
     }
 
     // 🔹 Validate new registration data
-    if (!name || !phone || !dob || !password || !passwordColor) {
+    // if (!name || !phone || !dob || !password || !passwordColor) {
+    if (!name || !phone || !password || !passwordColor) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 

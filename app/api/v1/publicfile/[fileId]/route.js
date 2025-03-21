@@ -26,6 +26,9 @@ export async function POST(req , {params}) {
       return NextResponse.json({ message: "Invalid or expired link" }, { status: 404 });
     }
 
+
+    console.log(`http://localhost:3000/access/${link}`);
+
     // Find the actual file in GridFS using the stored file ID
     const file = await db.collection("uploads.files").findOne({
       _id: new mongoose.Types.ObjectId(link.fileId),
@@ -42,7 +45,8 @@ export async function POST(req , {params}) {
       { _id: link._id },
       { $inc: { accessCount: 1 } }
     );
-
+     
+    console.log("✅ Access count incremented.");
     // Return file metadata (without requiring a password)
     return NextResponse.json({
       success: true,

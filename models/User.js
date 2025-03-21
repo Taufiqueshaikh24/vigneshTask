@@ -16,10 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    dob: {
-      type: Date,
-      required: true,
-    },
+    // dob: {
+    //   type: Date,
+    //   required: true,
+    // },
     password: {
       type: String,
       required: true,

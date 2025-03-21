@@ -125,7 +125,7 @@ export async function POST(req) {
       accessCount: 0, // Initialize access count
     });
 
-    console.log("✅ New shareable link created:", newLink.url);
+    console.log("✅ New shareable link created:  http://localhost:3000/access/",newLink.url);
 
     return NextResponse.json(
       { success: true, url: `/access/${newLink.url}` },

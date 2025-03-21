@@ -31,7 +31,7 @@ export async function GET(req) {
     const existingLink = await Link.findOne({ fileId: objectId });
 
     if (existingLink) {
-      console.log("✅ Link found:", existingLink.url);
+      console.log(`✅ Link found: http://localhost:3000/access/${existingLink.url}`);
       return NextResponse.json(
         { success: true, url: `/access/${existingLink.url}` },
         { status: 200 }

@@ -104,7 +104,7 @@ import { ObjectId } from "mongodb";
 export async function POST(req, { params }) {
   try {
     // Extract only the unique file ID from the URL
-    const fileId = params.url.split("/").pop(); // Extract last part of URL
+    const fileId = await params.url.split("/").pop(); // Extract last part of URL
     const { password } = await req.json();
 
     console.log("🔍 Extracted File ID:", fileId);
@@ -143,7 +143,7 @@ export async function POST(req, { params }) {
     }
 
     // Increment access count
-    link.accessCount += 1;
+    // link.accessCount += 1;
     await link.save();
 
     return NextResponse.json({

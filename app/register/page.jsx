@@ -166,7 +166,7 @@ const RegistrationPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [dob, setDob] = useState("");
+  // const [dob, setDob] = useState("");
   const [password, setPassword] = useState("");
   const [passwordColor, setPasswordColor] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -206,7 +206,7 @@ const RegistrationPage = () => {
       const response = await fetch("/api/v1/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, dob, password, passwordColor }),
+        body: JSON.stringify({ name, email, phone,  password, passwordColor }),
       });
 
       const data = await response.json();
@@ -250,10 +250,10 @@ const RegistrationPage = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
             <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
             <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
-          </div>
+          </div> */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <Input

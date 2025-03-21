@@ -443,31 +443,50 @@ const Access = () => {
 
       {/* File Preview Modal */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="flex flex-col items-center justify-center bg-black bg-opacity-50 p-6">
-          <DialogTitle>
-            <VisuallyHidden>File Preview</VisuallyHidden>
-          </DialogTitle>
+      <DialogContent 
+    className="flex flex-col items-center justify-center bg-black bg-opacity-50 p-6"
+  >
+    {/* Hidden Title for Accessibility */}
+    <DialogTitle>
+      <VisuallyHidden>File Preview</VisuallyHidden>
+    </DialogTitle>
 
-        
+    {/* Modal Box */}
+    <div className="relative bg-white p-6 rounded-lg shadow-xl w-full max-w-3xl flex flex-col items-center">
+      
+      {/* Close Button (Properly Positioned & Visible) */}
+      {/* <DialogClose 
+  className="absolute top-4 right-4 p-2 rounded-full bg-white hover:bg-gray-300 transition shadow-md"
+>
+  <X size={20} className="text-white" />
+</DialogClose> */}
 
-          {/* File Preview */}
-          <div className="flex justify-center items-center w-full">
-            {fileType === "text" ? (
-              <div className="p-4 max-w-full max-h-[500px] overflow-auto bg-gray-100 rounded-md shadow-inner border border-gray-300">
-                <pre className="whitespace-pre-wrap text-gray-800">{previewContent}</pre>
-              </div>
-            ) : fileType === ".pdf" ? (
-              <embed src={previewUrl} width="100%" height="500px" type="application/pdf" className="rounded-md border border-gray-300 shadow-md" />
-            ) : [".mp4", ".webm", ".ogg"].includes(fileType) ? (
-              <video controls className="w-full max-h-[500px] rounded-md shadow-md">
-                <source src={previewUrl} type="video/mp4" />
-                Your browser does not support video playback.
-              </video>
-            ) : (
-              <img src={previewUrl} alt="File Preview" className="max-w-full max-h-[500px] rounded-md shadow-md border border-gray-300" />
-            )}
+
+      {/* File Preview (Centered) */}
+      <div className="flex justify-center items-center w-full">
+        {fileType === "text" ? (
+          <div className="p-4 max-w-full max-h-[500px] overflow-auto bg-gray-100 rounded-md shadow-inner border border-gray-300">
+            <pre className="whitespace-pre-wrap text-gray-800">{previewContent}</pre>
           </div>
-        </DialogContent>
+        ) : fileType === ".pdf" ? (
+          <embed src={previewUrl} width="100%" height="500px" type="application/pdf" className="rounded-md border border-gray-300 shadow-md" />
+        ) : [".mp4", ".webm", ".ogg"].includes(fileType) ? (
+          <video controls className="w-full max-h-[500px] rounded-md shadow-md">
+            <source src={previewUrl} type="video/mp4" />
+            Your browser does not support video playback.
+          </video>
+        ) : [".mp3", ".wav", ".ogg"].includes(fileType) ? (
+          <audio controls className="w-full">
+            <source src={previewUrl} type="audio/mp3" />
+            Your browser does not support audio playback.
+          </audio>
+        ) : (
+          <img src={previewUrl} alt="File Preview" className="max-w-full max-h-[500px] rounded-md shadow-md border border-gray-300" />
+        )}
+      </div>
+
+    </div>
+  </DialogContent>
       </Dialog>
     </>
   );
