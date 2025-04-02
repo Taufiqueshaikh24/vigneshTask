@@ -419,16 +419,35 @@ export default function ShareModal({ fileId, filename, open, onClose  }) {
       });
 
       if (!linkRes.ok) throw new Error("Failed to generate link!");
+      
+      const fileInfo = await fetch(`/api/v1/readfile/${fileId}` , {
+          method:'GET', 
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+      })
+      
+      
+      const  data  = await fileInfo.json();
+      console.log("fileinfo",data)
+      const  data2 = data.file[0].metadata
+
+      
 
       const { url } = await linkRes.json();
       
-      const fullUrl = `${window.location.origin}${url}`;
+      // const fullUrl = `${window.location.origin}${url}`;
+       const fullUrl = `
+        url : ${window.location.origin}${url}
+        password : ${password}
+        color : ${data2.color}`;
+
       console.log("uurl", fullUrl);
       setGenerated(fullUrl);
 
       // Show success toast with the link and copy it to the clipboard
       toast.success("Shareable link generated!");
-      navigator.clipboard.writeText(`${window.location.origin}${url}`).then(() => {
+      // navigator.clipboard.writeText(`${window.location.origin}${url}`).then(() => {
+      navigator.clipboard.writeText(`${fullUrl}`).then(() => {
         toast.success("Link copied to clipboard!");
       });
 

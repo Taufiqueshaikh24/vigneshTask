@@ -475,18 +475,11 @@ export default function Header() {
         </div>
       )}
 
-      {/* 🔥 Fixed & Styled Header */}
+    
       <header className="fixed top-0 left-0 w-full h-16 bg-white shadow-md px-6 flex items-center justify-between z-50">
         {/* Logo */}
-        <Link href="/home">
-          <Image
-            src="/Logo2.png"
-            height={0}
-            width={0}
-            sizes="100vw"
-            alt="logo"
-            className="w-[100px] h-[60px]"
-          />
+        <Link href="/">
+         <h1>MyApp</h1>
         </Link>
 
         {/* Right Side: Either Buttons or User Menu */}
@@ -505,10 +498,10 @@ export default function Header() {
 
             <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
               <DropdownMenuItem
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/dashboard")}
                 className="hover:bg-gray-100 px-4 py-2 flex items-center gap-2"
               >
-                <HomeIcon size={18} className="text-gray-600" /> Home
+                <HomeIcon size={18} className="text-gray-600" /> Dashboard
               </DropdownMenuItem>
 
               <DropdownMenuItem

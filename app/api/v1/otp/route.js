@@ -27,9 +27,7 @@ export async function POST(req) {
       name: tempUser.name,
       email: tempUser.email,
       phone: tempUser.phone,
-      dob: tempUser.dob,
       password: tempUser.password,
-      passwordColor: tempUser.passwordColor,
       emailVerified: true, // Mark email as verified
     });
 

@@ -24,10 +24,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    passwordColor: {
-      type: String, // e.g., hex color code or predefined color name
-      required: true,
-    },
     emailVerified: {
       type: Boolean,
       default: false,

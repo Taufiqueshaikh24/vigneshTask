@@ -9,7 +9,7 @@ import { generateOtp } from "@/lib/generateOtp";
 export async function POST(req) {
   try {
     await connectToDatabase();
-    const { name, email, phone, dob, password, passwordColor, resendOtp } = await req.json();
+    const { name, email, phone, dob, password, resendOtp } = await req.json();
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -36,8 +36,8 @@ export async function POST(req) {
     }
 
     // 🔹 Validate new registration data
-    // if (!name || !phone || !dob || !password || !passwordColor) {
-    if (!name || !phone || !password || !passwordColor) {
+
+    if (!name || !email || !phone || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
@@ -59,7 +59,7 @@ export async function POST(req) {
 
       // 📧 Resend OTP email (commented out for testing)
       // await sendEmail(email, "Resend OTP - Verify Your Email", `Your new OTP is ${otp}. It expires in 2 minutes.`);
-
+      await sendEmail(email, "verification", name , otp);
       return NextResponse.json({ message: "OTP resent. Please verify your email." }, { status: 200 });
     }
 
@@ -73,7 +73,6 @@ export async function POST(req) {
       phone,
       dob,
       password: hashedPassword,
-      passwordColor,
       otp,
       otpExpiresAt,
     });

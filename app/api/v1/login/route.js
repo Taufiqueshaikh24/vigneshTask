@@ -77,22 +77,22 @@ export async function POST(req) {
     }
 
     // Generate JWT token
-    // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    //   expiresIn: "7d", // Token valid for 7 days
-    // });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d", // Token valid for 7 days
+    });
 
     // Serialize the cookie
-    // const cookie = serialize("token", token, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    //   sameSite: "strict",
-    //   maxAge: 7 * 24 * 60 * 60, // 7 days
-    //   path: "/",
-    // });
+    const cookie = serialize("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: "/",
+    });
 
     // Set cookie in response headers
     const response = NextResponse.json({ message: "Verify OTP!" });
-    // response.headers.set("Set-Cookie", cookie);
+    response.headers.set("Set-Cookie", cookie);
 
     return response;
   } catch (error) {
